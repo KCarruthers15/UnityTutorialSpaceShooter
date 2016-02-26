@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+[System.SerializableAttribute]
+public class Boundary 
+{
+    public float xMin, xMax, zMin, zMax;
+}
+
+public class PlayerController : MonoBehaviour 
+{
 	private Rigidbody rb;
     
     public float speed;
+    public Boundary boundary;
 
 	void Start() {
 		rb = GetComponent<Rigidbody>();
@@ -16,7 +24,11 @@ public class PlayerController : MonoBehaviour {
 
 		rb.velocity = (new Vector3(moveHorizontal, 0.0f, moveVertical)) * speed;
         
-        
-      //  rb.position = new Vector3(x, 0, z);  
+        rb.position = new Vector3 
+        (
+            Mathf.Clamp(rb.position.x, boundary.xMin, boundary.xMax), 
+            0.0f, 
+            Mathf.Clamp(rb.position.z, boundary.zMin, boundary.zMax)
+        );    
 	}
 }
